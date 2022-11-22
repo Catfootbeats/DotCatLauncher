@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resource\Image\headImage.png" />
+    <None Remove="Resource\Image\TestBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.7.0-ci369" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1466-prerelease" />
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageReference Include="ProjBobcat" Version="1.16.0" />
+    <PackageReference Include="WindowsAPICodePackShell" Version="7.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Image\headImage.png" />
+    <Resource Include="Resource\Image\TestBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Event\" />
+  </ItemGroup>
+</Project>
