@@ -8,6 +8,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              xmlns:viewmodels="clr-namespace:DotCatLauncher.ViewModels" 
+             xmlns:domain="clr-namespace:DotCatLauncher.Domain"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:prism="http://prismlibrary.com/"
              d:DataContext="{d:DesignInstance Type=viewmodels:IndexViewModel}"
@@ -36,7 +37,15 @@
                         Content="离线登录" />
                     <StackPanel Grid.Row="1">
                         <Image Source="..\Resource\Image\headImage.png" Width="50" Height="50" Stretch="Fill"/>
-                        <TextBox Margin="8" Width="120" TextAlignment="Center" Text="{Binding PlayerName}"/>
+                        <TextBox Margin="8" Width="120" TextAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="PlayerName" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </StackPanel>
                     <Border x:Name="card" 
                             Grid.Row="2" 
@@ -100,7 +109,15 @@
                         Content="微软登录" />
                     <StackPanel Grid.Row="1">
                         <Image Source="..\Resource\Image\headImage.png" Width="50" Height="50" Stretch="Fill"/>
-                        <TextBox Margin="8" Width="120" TextAlignment="Center" Text="{Binding PlayerName}"/>
+                        <TextBox Margin="8" Width="120" TextAlignment="Center">
+                            <TextBox.Text>
+                                <Binding Path="PlayerName" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </StackPanel>
                     <Border Grid.Row="2" 
                             BorderThickness="2" 
@@ -164,7 +181,7 @@
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <Button Margin="20" Command="{Binding StartCommand}"
   Style="{StaticResource MaterialDesignFloatingActionButton}"
-  materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+  materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
   materialDesign:ButtonProgressAssist.Value="-1"
   materialDesign:ButtonProgressAssist.IsIndeterminate="True"
   Content="{materialDesign:PackIcon Kind=Play, Size=30}"

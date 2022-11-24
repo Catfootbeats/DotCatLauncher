@@ -1,4 +1,6 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using DotCatLauncher.Event;
+using MaterialDesignThemes.Wpf;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -23,11 +25,13 @@ namespace DotCatLauncher.Views
     /// </summary>
     public partial class IndexView : UserControl
     {
-        public IndexView()
+        public IndexView(IEventAggregator eventAggregator)
         {
             InitializeComponent();
+            this.eventAggregator = eventAggregator;
         }
+        private IEventAggregator eventAggregator;
         private void Flipper_OnIsFlippedChanged(object sender, RoutedPropertyChangedEventArgs<bool> e)
-            => System.Diagnostics.Debug.WriteLine($"Card is flipped = {e.NewValue}");
+            => eventAggregator.GetEvent<VerifyWay>().Publish(e.NewValue);
     }
 }

@@ -12,7 +12,7 @@ namespace DotCatLauncher.Common.Modules
 
 		public string Id
         {
-			get { return "Minecraft "+id; }
+			get { return id; }
 			set { id = value; }
 		}
 

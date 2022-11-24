@@ -4,6 +4,7 @@ using DotCatLauncher.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using ProjBobcat.Class.Helper;
+using System.Net;
 using System.Windows;
 
 namespace DotCatLauncher
@@ -23,6 +24,7 @@ namespace DotCatLauncher
             if (service != null)
                 service.Configure();
             base.OnInitialized();
+            ServicePointManager.DefaultConnectionLimit = 512;
             ServiceHelper.Init();
             HttpClientHelper.Init();
         }
