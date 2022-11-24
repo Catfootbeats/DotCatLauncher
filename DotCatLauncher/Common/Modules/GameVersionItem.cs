@@ -8,12 +8,12 @@ namespace DotCatLauncher.Common.Modules
 {
     public class GameVersionItem
     {
-		private string name;
+		private string id;
 
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
+		public string Id
+        {
+			get { return "Minecraft "+id; }
+			set { id = value; }
 		}
 
 	}

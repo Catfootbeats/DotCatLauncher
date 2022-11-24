@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
 using ProjBobcat.DefaultComponent.Launch.GameCore;
@@ -15,11 +14,15 @@ using System.Windows.Input;
 using DotCatLauncher.Common.Modules;
 using ProjBobcat.Class.Model;
 using System.Collections.ObjectModel;
+using Prism.Events;
+using DotCatLauncher.Event;
+using System.Windows.Documents;
 
 namespace DotCatLauncher.ViewModels
 {
     public class IndexViewModel : BindableBase
     {
+        private readonly IEventAggregator eventAggregator;
         //get player's name
         private string playerName;
 
@@ -29,23 +32,39 @@ namespace DotCatLauncher.ViewModels
             set { SetProperty(ref playerName, value); }
         }
 
-        public IndexViewModel()
+        public IndexViewModel(IEventAggregator eventAggregator)
         {
             ChoseGamePathCommand = new DelegateCommand(ChoseGamePath);
             StartCommand = new DelegateCommand(StartGame);
-            InitCore();
-            //TODO create a class to replace VersionInfo
-            //VersionInfos = ObservableCollection<VersionInfo>;
+            ScanGameCommand = new DelegateCommand(ScanGame);
+            this.eventAggregator= eventAggregator;
+            //InitCore();
+            gameVersionItems = new ObservableCollection<GameVersionItem>();
+        }
+        //add version in list
+        private void CreateList()
+        {
+            (from e in gameList.Select(o => o.Id).Distinct() select new GameVersionItem { Id = e }).ToList().ForEach(l => gameVersionItems.Add(l));
+        }
+
+        //Scan Game
+        public DelegateCommand ScanGameCommand { get; private set; }
+        private List<VersionInfo> gameList =new();
+        private void ScanGame()
+        {
+            if (core == null) { eventAggregator.GetEvent<SnackBarMsg>().Publish("未选择游戏文件夹"); return; }
+            gameList = core.VersionLocator.GetAllGames().ToList();
+            CreateList();
         }
 
         //init core
-        Guid clientToken = Guid.NewGuid();
+        readonly Guid clientToken = Guid.NewGuid();
         private DefaultGameCore core;
-        private void InitCore()
+        private void InitCore(string rootPath)
         {
             core = new DefaultGameCore()
             {
-                ClientToken = this.clientToken, // 游戏客户端识别码，你可以设置成你喜欢的任何GUID，例如88888888-8888-8888-8888-888888888888，或者自己随机生成一个！
+                ClientToken = clientToken, // 游戏客户端识别码，你可以设置成你喜欢的任何GUID，例如88888888-8888-8888-8888-888888888888，或者自己随机生成一个！
                 RootPath = rootPath, // .minecraft\的路径
                 VersionLocator = new DefaultVersionLocator(rootPath, clientToken)
                 {
@@ -58,11 +77,11 @@ namespace DotCatLauncher.ViewModels
 
         //chose game version by listbox and add game version
         public DelegateCommand<VersionInfo> ChoseVersionCommand { get; private set; }
-        private ObservableCollection<VersionInfo> versionInfos;
-        public ObservableCollection<VersionInfo> VersionInfos
+        private ObservableCollection<GameVersionItem> gameVersionItems;
+        public ObservableCollection<GameVersionItem> GameVersionItems
         {
-            get { return versionInfos; }
-            set { versionInfos = value; RaisePropertyChanged(); }
+            get { return gameVersionItems; }
+            set { gameVersionItems = value; RaisePropertyChanged(); }
         }
         //chose game folder path and game version
         //TODO change click button
@@ -80,6 +99,8 @@ namespace DotCatLauncher.ViewModels
                 if (dialog.FileName == null || dialog.FileName == String.Empty)
                     return;
                 rootPath = dialog.FileName;
+                InitCore(rootPath);
+                ScanGame();
             }
             catch (Exception)
             {
@@ -98,9 +119,5 @@ namespace DotCatLauncher.ViewModels
         {
 
         }
-
-        private string debugLog;
-
-        public string DebugLog { get => debugLog; set => SetProperty(ref debugLog, value); }
     }
 }

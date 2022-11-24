@@ -19,7 +19,4 @@
     <Resource Include="Resource\Image\headImage.png" />
     <Resource Include="Resource\Image\TestBackground.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Event\" />
-  </ItemGroup>
 </Project>

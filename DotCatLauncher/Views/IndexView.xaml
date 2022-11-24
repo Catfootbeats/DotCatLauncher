@@ -7,8 +7,11 @@
              xmlns:local="clr-namespace:DotCatLauncher.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-             xmlns:viewmodels="clr-namespace:DotCatLauncher.ViewModels" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewmodels="clr-namespace:DotCatLauncher.ViewModels" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"
              d:DataContext="{d:DesignInstance Type=viewmodels:IndexViewModel}"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1000">
     <Grid>
@@ -52,20 +55,32 @@
                                 <Border.Background>
                                     <SolidColorBrush Color="LightGray" Opacity="0.3"/>
                                 </Border.Background>
-                                <ListBox Margin="10" Height="230">
-                                    <TextBlock Text="Minecraft 1.14.5 下北泽特供"/>
-                                    <TextBlock Text="Minecraft 1.19.19 下北泽特供"/>
-                                    <TextBlock Text="测试"/>
-                                    <TextBlock Text="测试"/>
-                                    <TextBlock Text="测试"/>
-                                    <TextBlock Text="测试"/>
-                                    <TextBlock Text="测试"/>
-                                    <TextBlock Text="测试"/>
+                                <ListBox x:Name="gameVersionList0" 
+                                         Margin="10" Height="230" 
+                                         ItemsSource="{Binding GameVersionItems}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding ChoseVersionCommand}" CommandParameter="{Binding ElementName=gameVersionList0,Path=SelectedItem}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Id}"/>
+                                                <!--<Button HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}" Command="">
+                                                    <materialDesign:PackIcon Kind="Delete" ToolTip="从列表中删除"/>
+                                                </Button>
+                                                <Button HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}" Command="">
+                                                    <materialDesign:PackIcon Kind="FormatVerticalAlignTop" ToolTip="移动到顶部"/>
+                                                </Button>-->
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
                             </Border>
                             <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="3">
-                                <Button Margin="3" Content="版本管理" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}" Command="{Binding ChoseGamePathCommand}"/>
-                                <Button Margin="3" Content="选择皮肤" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}"/>
+                                <Button Margin="3" Content="添加目录" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}" Command="{Binding ChoseGamePathCommand}"/>
+                                <Button Margin="3" Content="刷新列表" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}" Command="{Binding ScanGameCommand}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -76,7 +91,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" VerticalAlignment="Top"
                         Style="{StaticResource MaterialDesignFlatButton}"
@@ -103,24 +118,33 @@
                                 <Border.Background>
                                     <SolidColorBrush Color="LightGray" Opacity="0.3"/>
                                 </Border.Background>
-                                <ListBox x:Name="gameVersionList" Margin="10" Height="230">
+                                <ListBox x:Name="gameVersionList1" 
+                                         Margin="10" 
+                                         Height="230" 
+                                         ItemsSource="{Binding GameVersionItems}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="SelectionChanged">
-                                            <i:InvokeCommandAction Command="{Binding ChoseVersionCommand}" CommandParameter="{Binding ElementName=gameVersionList,Path=SelectedItem}"/>
+                                            <i:InvokeCommandAction Command="{Binding ChoseVersionCommand}" CommandParameter="{Binding ElementName=gameVersionList1,Path=SelectedItem}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Name}"/>
+                                                <TextBlock Text="{Binding Id}"/>
+                                                <!--<Button HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}" Command="">
+                                                    <materialDesign:PackIcon Kind="Delete" ToolTip="从列表中删除"/>
+                                                </Button>
+                                                <Button HorizontalAlignment="Right" Style="{StaticResource MaterialDesignFlatButton}" Command="">
+                                                    <materialDesign:PackIcon Kind="FormatVerticalAlignTop" ToolTip="移动到顶部"/>
+                                                </Button>-->
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </Border>
                             <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="3">
-                                <Button Margin="3" Content="版本管理" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}" Command="{Binding ChoseGamePathCommand}"/>
-                                <Button Margin="3" Content="选择皮肤" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}"/>
+                                <Button Margin="3" Content="添加目录" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}" Command="{Binding ChoseGamePathCommand}"/>
+                                <Button Margin="3" Content="刷新列表" Width="140" Style="{StaticResource MaterialDesignOutlinedLightButton}" Command="{Binding ScanGameCommand}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -128,7 +152,6 @@
             </materialDesign:Flipper.BackContent>
         </materialDesign:Flipper>
         <Grid x:Name="grid" Grid.Column="1">
-            <TextBlock Text="{Binding DebugLog}"/>
             <!--<StackPanel  Orientation="Vertical" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Top" >
                 <materialDesign:Card>
                     <Expander HorizontalAlignment="Stretch" Header="MC百科">

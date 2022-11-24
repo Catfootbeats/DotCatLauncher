@@ -3,6 +3,7 @@ using DotCatLauncher.ViewModels;
 using DotCatLauncher.Views;
 using Prism.Ioc;
 using Prism.Modularity;
+using ProjBobcat.Class.Helper;
 using System.Windows;
 
 namespace DotCatLauncher
@@ -22,6 +23,8 @@ namespace DotCatLauncher
             if (service != null)
                 service.Configure();
             base.OnInitialized();
+            ServiceHelper.Init();
+            HttpClientHelper.Init();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

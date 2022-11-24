@@ -28,7 +28,7 @@
                     <materialDesign:ColorZone.Background>
                         <SolidColorBrush Color="White" Opacity="0.65"/>
                     </materialDesign:ColorZone.Background>
-                <DockPanel LastChildFill="False">
+                    <DockPanel LastChildFill="False">
                         <StackPanel VerticalAlignment="Top">
                             <ListBox x:Name="menuBar"
                    Margin="0,3,0,3"
@@ -60,6 +60,7 @@
         </Grid>
         <Grid x:Name="mainRegion" Grid.Column="1">
             <ContentControl prism:RegionManager.RegionName="{x:Static etx:PrismManager.MainWindowRegionName}"/>
+            <materialDesign:Snackbar x:Name="SnackBarIndex"  MessageQueue="{materialDesign:MessageQueue}" />
         </Grid>
     </Grid>
 </Window>

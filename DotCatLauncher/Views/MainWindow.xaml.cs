@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using DotCatLauncher.Event;
+using Prism.Events;
+using System.Windows;
 
 namespace DotCatLauncher.Views
 {
@@ -7,9 +9,10 @@ namespace DotCatLauncher.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(IEventAggregator eventAggregator)
         {
             InitializeComponent();
+            eventAggregator.GetEvent<SnackBarMsg>().Subscribe(msg => { SnackBarIndex.MessageQueue?.Enqueue(msg); });
         }
     }
 }
