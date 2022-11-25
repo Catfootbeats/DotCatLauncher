@@ -179,7 +179,7 @@
                 </materialDesign:Card>
             </StackPanel>-->
             <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <Button Margin="20" Command="{Binding StartCommand}"
+                <Button x:Name="StartBtm" Margin="20" Command="{Binding StartCommand}"
   Style="{StaticResource MaterialDesignFloatingActionButton}"
   materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
   materialDesign:ButtonProgressAssist.Value="-1"

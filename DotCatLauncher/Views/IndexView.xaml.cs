@@ -29,6 +29,7 @@ namespace DotCatLauncher.Views
         {
             InitializeComponent();
             this.eventAggregator = eventAggregator;
+            eventAggregator.GetEvent<GameVersionIndex>().Publish(gameVersionList0.SelectedIndex);
         }
         private IEventAggregator eventAggregator;
         private void Flipper_OnIsFlippedChanged(object sender, RoutedPropertyChangedEventArgs<bool> e)
